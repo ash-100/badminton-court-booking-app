@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "635177722315",
+    "project_id": "badminton-court-booking-cc9f0",
+    "storage_bucket": "badminton-court-booking-cc9f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635177722315:android:a582125e33c407e008964e",
+        "android_client_info": {
+          "package_name": "com.example.badminton_court_booking_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "635177722315-ec39gmrk6bcs8nhok9l29h160grbebf6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWEtfj3DRJRkWUUB5p4HIF1gtn_oPPeq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "635177722315-ec39gmrk6bcs8nhok9l29h160grbebf6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
