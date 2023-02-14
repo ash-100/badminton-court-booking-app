@@ -1,4 +1,5 @@
 //Screens
+import 'package:badminton_court_booking_app/view/bottom_nav_screens/accounts.dart';
 import 'package:badminton_court_booking_app/view/bottom_nav_screens/home.dart';
 import 'package:badminton_court_booking_app/view/bottom_nav_screens/slots.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 List<Widget> pages = [
   Home(),
   MySlot(),
-  Text('Account'),
+  Accounts(),
 ];
 
 //colors
