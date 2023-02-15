@@ -163,7 +163,9 @@ class _BookingScreenState extends State<BookingScreen> {
         .then((value) {
       for (var doc in value.docs) {
         slotModel.Slot _slot = slotModel.Slot.fromJson(doc);
-        courtsBooked.add(_slot.courtNo);
+        if (_slot.isCancelled == false) {
+          courtsBooked.add(_slot.courtNo);
+        }
       }
       if (courtsBooked.length == 6) {
         setState(() {
@@ -171,11 +173,16 @@ class _BookingScreenState extends State<BookingScreen> {
           availability = 'Not available';
         });
       } else {
-        setState(() {
-          canBook = true;
-          availableCourtNo = courtsBooked.length + 1;
-          availability = 'Available';
-        });
+        for (int i = 1; i <= 6; i++) {
+          if (!courtsBooked.contains(i)) {
+            setState(() {
+              canBook = true;
+              availableCourtNo = i;
+              availability = 'Available';
+            });
+            break;
+          }
+        }
       }
     });
   }
@@ -183,16 +190,14 @@ class _BookingScreenState extends State<BookingScreen> {
   Future bookSlot(DateTime dateTime) async {
     checkSlot(dateTime);
     if (!canBook) return;
-
+    var newSlotDoc = FirebaseFirestore.instance.collection('slots').doc();
     slotModel.Slot newSlot = slotModel.Slot(
+        id: newSlotDoc.id,
         uid: FirebaseAuth.instance.currentUser!.uid,
         isCancelled: false,
         dateTime: dateTime.millisecondsSinceEpoch,
         courtNo: availableCourtNo);
-    FirebaseFirestore.instance
-        .collection('slots')
-        .add(newSlot.toJson())
-        .then((value) {
+    newSlotDoc.set(newSlot.toJson()).then((value) {
       var snackBar = SnackBar(content: Text('Booked Successfully'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Navigator.pop(context);

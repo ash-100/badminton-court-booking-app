@@ -1,6 +1,7 @@
 import 'package:badminton_court_booking_app/model/slot.dart' as slotModel;
 import 'package:badminton_court_booking_app/view/widgets/custom_button.dart';
 import 'package:badminton_court_booking_app/view/widgets/slots_widgets/single_info_slot.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SlotInfo extends StatefulWidget {
@@ -76,7 +77,12 @@ class _SlotInfoState extends State<SlotInfo> {
                           width: MediaQuery.of(context).size.width * 0.5,
                           child: CustomButton(
                             name: 'Cancel',
-                            onpressed: () {},
+                            onpressed: () async {
+                              FirebaseFirestore.instance
+                                  .collection('slots')
+                                  .doc(widget.slot.id)
+                                  .update({'isCancelled': true});
+                            },
                             color: Colors.red,
                           ),
                         ),
