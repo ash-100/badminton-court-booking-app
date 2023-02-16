@@ -11,7 +11,7 @@ List<Widget> pages = [
 ];
 
 //colors
-Color primaryColor = Colors.green;
+Color primaryColor = Color.fromARGB(255, 18, 89, 47);
 
 //content
 String desc =

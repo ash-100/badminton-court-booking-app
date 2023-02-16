@@ -2,11 +2,21 @@ import 'package:badminton_court_booking_app/controller/auth_controller.dart';
 import 'package:badminton_court_booking_app/view/screens/home_screen.dart';
 import 'package:badminton_court_booking_app/view/screens/user_details_screen.dart';
 import 'package:badminton_court_booking_app/view/widgets/custom_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool userExists = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,25 +61,41 @@ class LoginScreen extends StatelessWidget {
               CustomButton(
                   name: 'Login',
                   onpressed: () async {
-                    var credential = signInWithGoogle();
-                    if (credential == null) {
+                    final GoogleSignInAccount? googleUser =
+                        await GoogleSignIn().signIn();
+                    final GoogleSignInAuthentication? googleAuth =
+                        await googleUser?.authentication;
+
+                    final credential = GoogleAuthProvider.credential(
+                        accessToken: googleAuth?.accessToken,
+                        idToken: googleAuth?.idToken);
+                    UserCredential _userCredential = await FirebaseAuth.instance
+                        .signInWithCredential(credential);
+
+                    if (_userCredential == null) {
                       var snackBar = SnackBar(
                           content:
                               Text('Error while loggin in. Please Try again'));
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     } else {
-                      if (await checkIfUserExists()) {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()),
-                            (route) => false);
-                      } else {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => UserDetailsScreen()));
-                      }
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .get()
+                          .then((value) {
+                        if (value.exists &&
+                            value.data()!['name'].toString().trim() != '') {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()));
+                        } else {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UserDetailsScreen()));
+                        }
+                      });
                     }
                   }),
             ],

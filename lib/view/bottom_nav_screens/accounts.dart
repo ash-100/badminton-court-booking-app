@@ -1,3 +1,4 @@
+import 'package:badminton_court_booking_app/view/screens/login_screen.dart';
 import 'package:badminton_court_booking_app/view/widgets/custom_button.dart';
 import 'package:badminton_court_booking_app/view/widgets/custom_input.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -99,7 +100,15 @@ class _AccountsState extends State<Accounts> {
                 }
               }),
           CustomButton(
-              color: Colors.red, name: 'Logout', onpressed: () async {}),
+              color: Colors.red,
+              name: 'Logout',
+              onpressed: () async {
+                FirebaseAuth.instance.signOut();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    (route) => false);
+              }),
         ],
       ),
     );

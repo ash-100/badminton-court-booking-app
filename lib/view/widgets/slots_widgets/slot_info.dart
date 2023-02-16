@@ -47,28 +47,28 @@ class _SlotInfoState extends State<SlotInfo> {
           Row(
             children: [
               Spacer(),
-              DateTime.now().millisecondsSinceEpoch > widget.slot.dateTime
+              widget.slot.isCancelled
                   ? Container(
                       padding: EdgeInsets.all(8),
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: Center(
                           child: Text(
-                        'DONE',
+                        'CANCELLED',
                         style: TextStyle(
-                            color: Colors.green,
+                            color: Colors.red,
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
                       )),
                     )
-                  : widget.slot.isCancelled
+                  : DateTime.now().millisecondsSinceEpoch > widget.slot.dateTime
                       ? Container(
                           padding: EdgeInsets.all(8),
                           width: MediaQuery.of(context).size.width * 0.5,
                           child: Center(
                               child: Text(
-                            'CANCELLED',
+                            'DONE',
                             style: TextStyle(
-                                color: Colors.red,
+                                color: Colors.green,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20),
                           )),

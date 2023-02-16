@@ -15,22 +15,3 @@ Future<UserCredential?> signInWithGoogle() async {
     return null;
   }
 }
-
-Future<bool> checkIfUserExists() async {
-  try {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      if (value.exists && value.data()!['name'].toString().trim() != '') {
-        return true;
-      } else {
-        return false;
-      }
-    });
-  } catch (e) {
-    return false;
-  }
-  return false;
-}
